@@ -1406,6 +1406,7 @@ void handle_connection (int fd)
         struct conn_s *connptr;
         struct request_s *request = NULL;
         hashmap_t hashofheaders = NULL;
+	const char *useragent;
 
         char sock_ipaddr[IP_LENGTH];
         char peer_ipaddr[IP_LENGTH];
@@ -1513,10 +1514,15 @@ void handle_connection (int fd)
                         goto fail;
                 }
 
+		useragent = lookup_variable(hashofheaders,"user-agent");
+		if(useragent == NULL) {
+			useragent = "N/A";
+		}
+
                 log_message (LOG_CONN,
                              "Established connection to host \"%s\" using "
-                             "file descriptor %d.", request->host,
-                             connptr->server_fd);
+                             "file descriptor %d (User-Agent: %s).", request->host,
+                             connptr->server_fd, useragent);
 
                 if (!connptr->connect_method)
                         establish_http_connection (connptr, request);
