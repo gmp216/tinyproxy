@@ -20,3 +20,5 @@ cscope.files
 cscope.out
 *~
 tags
+ChangeLog
+compile
